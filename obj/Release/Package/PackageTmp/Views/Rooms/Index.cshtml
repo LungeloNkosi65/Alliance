@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Accommodation.Models.Room>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Rooms</h2>
+<br />
+
+<p>
+    @Html.ActionLink("Add New Room", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Buildings.BuildingName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomTypes.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfPeople)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.roomDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomPicture)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomPrice)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Buildings.BuildingName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomTypes.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfPeople)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.roomDescription)
+        </td>
+        <td>
+            <a><img src="data:image/png;base64,@Convert.ToBase64String(item.RoomPicture, 0, item.RoomPicture.Length)" style="width: 40px; height: 40px" alt="" /></a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomPrice)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.RoomId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.RoomId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.RoomId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Accommodation.Models.ManagerBuilding>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Building Managers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Building.BuildingName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Manager.FullName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Building.BuildingName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Manager.FullName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ManagerBuildingId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ManagerBuildingId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ManagerBuildingId })
+        </td>
+    </tr>
+}
+
+</table>
