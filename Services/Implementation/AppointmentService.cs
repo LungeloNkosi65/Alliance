@@ -55,6 +55,11 @@ namespace Accommodation.Services.Implementation
             return _appointmentRepository.GetAppointments(id);
         }
 
+        public string getBuildingAddress(int? managerId)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Insert(Appointment appointment)
         {
             return _appointmentRepository.Insert(appointment);

@@ -48,7 +48,7 @@
                                         @*<p><span><i class="fas fa-car"></i></span>@Html.DisplayFor(modelItem => item..CategoryName)</p>*@
                                         <p> Available Rooms @Html.DisplayFor(modelItem => item.NoOfPeople)</p>
                                     </div>
-                                    @Html.ActionLink("Book Room", "Create", "BookingRooms", new { id = item.RoomId }, new { @class = "btn btn-info" })
+                                    @Html.ActionLink("Book Room", "Create", "RoomBookings", new { id = item.RoomId }, new { @class = "btn btn-info" })
                                     @Html.ActionLink("Make Appointment", "Create", "BookingRooms", new { id = item.RoomId }, new { @class = "btn btn-success" })
 
                                 </div>

@@ -23,6 +23,8 @@ namespace Accommodation.Models
         public DateTime DateOFBooking { get; set; }
         public virtual Room Room { get; set; }
         //public virtual Building Building { get; set; }
+        [DisplayName("Building Address")]
+        public string BuildingAddress { get; set; }
 
         ApplicationDbContext db = new ApplicationDbContext();
         public string GetBuildingName()

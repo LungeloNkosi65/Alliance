@@ -82,7 +82,6 @@ namespace Accommodation.Models
         [Display(Name = "Identity Number")]
         [MaxLength(13), MinLength(13)]
         public string IDNumber { get; set; }
-        [Required]
         public string Gender { get; set; }
         [Required]
         [Display(Name = "Phone Number")]
@@ -101,7 +100,6 @@ namespace Accommodation.Models
         public string FileName { get; set; }
         public byte[] FileContent { get; set; }
 
-        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]

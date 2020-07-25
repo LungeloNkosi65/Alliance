@@ -20,6 +20,8 @@ namespace Accommodation.Services.Interface
         int GetNoOfRoom(int buildId);
         string GetBuildingName(int buildId);
         string NewRoomNumber(int buildingId);
+        string GetBuildingAddress(int buildindId);
         bool ChceckPoeple(int roomTypeId,int numberOfPeople);
+        int getBuildingId(int? roomId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Accommodation.Models;
 using Accommodation.Services.Interface;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,16 @@ namespace Accommodation.Controllers
         private IRoomService _roomService;
         private IRoomTypeService _roomTypeService;
         private IBuildingService _buildingService;
+        private string userName;
+        
+        public RoomsController()
+        {
+            if (User.Identity.IsAuthenticated == true)
+            {
+                userName = User.Identity.GetUserName();
+
+            }
+        }
         public RoomsController (IRoomService roomService,IRoomTypeService roomTypeService ,IBuildingService buildingService)
         {
             _roomService = roomService;
@@ -43,8 +54,9 @@ namespace Accommodation.Controllers
         // GET: Rooms/Create
         public ActionResult Create()
         {
+            
             ViewBag.roomtypeId = new SelectList(_roomTypeService.GetRoomTypes(), "roomtypeId", "Type");
-            ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings(), "BuildingId", "BuildingName");
+            ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x=>x.OwnerEmail==userName), "BuildingId", "BuildingName");
             return View();
         }
 
@@ -73,7 +85,7 @@ namespace Accommodation.Controllers
 
 
                         ViewBag.roomtypeId = new SelectList(_roomTypeService.GetRoomTypes(), "roomtypeId", "Type");
-                        ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings(), "BuildingId", "BuildingName");
+                        ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x => x.OwnerEmail == userName), "BuildingId", "BuildingName");
                         return RedirectToAction("Index");
                     }
                 }
@@ -81,7 +93,7 @@ namespace Accommodation.Controllers
                 {
                      ModelState.AddModelError("", "Number of poeple exceeded room type quantity");
                     ViewBag.roomtypeId = new SelectList(_roomTypeService.GetRoomTypes(), "roomtypeId", "Type");
-                    ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings(), "BuildingId", "BuildingName");
+                    ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x => x.OwnerEmail == userName), "BuildingId", "BuildingName");
                     return View(room);
                 }
 
@@ -90,11 +102,11 @@ namespace Accommodation.Controllers
             catch
             {
                 ViewBag.roomtypeId = new SelectList(_roomTypeService.GetRoomTypes(), "roomtypeId", "Type");
-                ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings(), "BuildingId", "BuildingName");
+                ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x => x.OwnerEmail == userName), "BuildingId", "BuildingName");
                 return View(room);
             }
             ViewBag.roomtypeId = new SelectList(_roomTypeService.GetRoomTypes(), "roomtypeId", "Type");
-            ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings(), "BuildingId", "BuildingName");
+            ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x => x.OwnerEmail == userName), "BuildingId", "BuildingName");
             return View(room);
         }
 

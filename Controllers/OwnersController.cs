@@ -54,6 +54,8 @@ namespace Accommodation.Controllers
             //return RedirectToAction("Download");
         }
 
+
+
         [HttpPost]
         public ActionResult ViewPDF(int? id)
         {

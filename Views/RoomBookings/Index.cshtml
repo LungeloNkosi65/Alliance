@@ -26,6 +26,7 @@ else
         <th>
             @Html.DisplayNameFor(model => model.Room.RoomNumber)
         </th>
+        <th>Building Address</th>
         <th>
             @Html.DisplayNameFor(model => model.TenantEmail)
         </th>
@@ -40,28 +41,32 @@ else
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BuildingId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Room.RoomNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenantEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.BookingId }) |*@
-                @Html.ActionLink("Pay For Room |", "Delete", new { id = item.BookingId }) |
-                @Html.ActionLink("View Receipt", "Details", new { id = item.BookingId })
-            </td>
-        </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.BuildingId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Room.RoomNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BuildingAddress)
+
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TenantEmail)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RoomPrice)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        @*@Html.ActionLink("Edit", "Edit", new { id = item.BookingId }) |*@
+        @Html.ActionLink("Pay For Room |", "Delete", new { id = item.BookingId }) |
+        @Html.ActionLink("View Receipt", "Details", new { id = item.BookingId })
+    </td>
+</tr>
     }
 
 </table>

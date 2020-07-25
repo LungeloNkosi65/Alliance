@@ -10,6 +10,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Accommodation.Models;
 using System.IO;
+using System.Net.Mail;
+using System.Configuration;
+using Accommodation.Services.Implementation;
+using System.Collections.Generic;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace Accommodation.Controllers
 {
@@ -157,16 +162,19 @@ namespace Accommodation.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> RegisterManager(RegisterViewModel model)
         {
 
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                string pwd = "@User001";
 
-                    Manager manager = new Manager();
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, pwd);
+                     model.Password = pwd;
+                     model.ConfirmPassword = pwd;
+                     Manager manager = new Manager();
                     manager.FullName = model.FullName;
                     manager.LastName = model.LastName;
                     manager.Email = model.Email;
@@ -177,17 +185,44 @@ namespace Accommodation.Controllers
                     db.Managers.Add(manager);
                     db.SaveChanges();
 
+                var provider = new DpapiDataProtectionProvider("SampleAppName");
+                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(
+                    provider.Create("SampleTokenName"));
+
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ConfirmEmail", "Users", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                var mailTo = new List<MailAddress>();
+                mailTo.Add(new MailAddress(model.Email, model.FullName));
+                var body = $"Hello {model.FullName}, Alliance Properties SA Team have created an account on your behalf as a Manager. <br/><br/>Your login credentials are as follows<br/><br/>" +
+                    "Email (Username) : " + model.Email +
+                    "<br/>Password : " + ConfigurationManager.AppSettings.Get("tempPassword").ToString() +
+                    "<br/><br/> " +
+                    "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+
+                Accommodation.Services.Implementation.EmailService emailService = new Accommodation.Services.Implementation.EmailService();
+                emailService.SendEmail(new EmailContent()
+                {
+                    mailTo = mailTo,
+                    mailCc = new List<MailAddress>(),
+                    mailSubject = "Confirm your account",
+                    mailBody = body,
+                    mailFooter = "<br/> Many Thanks, <br/> <b>Taxi App SA Team</b>",
+                    mailPriority = MailPriority.High,
+                    mailAttachments = new List<Attachment>()
+                });
+                UserManager.AddToRole(user.Id, "Manager");
+
 
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     //UserManager.AddToRole(user.Id, "Manager");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Managers");
                 }
                 AddErrors(result);
             }
@@ -206,7 +241,7 @@ namespace Accommodation.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, HttpPostedFileBase files)
         {
     
             
@@ -217,6 +252,13 @@ namespace Accommodation.Controllers
 
                 if (model.Type == "Landlord")
                 {
+                    if(files!=null && files.ContentLength > 0)
+                    {
+                        model.FileName = files.FileName;
+                        string[] bits = model.FileName.Split('\\');
+                        model.FileContent = ConvertToBytes(files);
+                    }
+
                     Owner owner = new Owner();
                  
                     owner.FullName = model.FullName;
@@ -229,8 +271,10 @@ namespace Accommodation.Controllers
                     owner.Status = "Awaiting Approval";
                     owner.UserId = user.Id;
                     owner.FileContent = model.FileContent;
+                    owner.FileName = model.FileName;
                     db.owners.Add(owner);
                     db.SaveChanges();
+                    UserManager.AddToRole(user.Id, "Manager");
 
                 }
                 else
@@ -246,7 +290,7 @@ namespace Accommodation.Controllers
                     tenant.Gender = "Male";
                     db.Tenants.Add(tenant);
                     db.SaveChanges();
-                    UserManager.AddToRole(user.Id, "Manager");
+                    UserManager.AddToRole(user.Id, "Tenant");
                 }
 
                 if (result.Succeeded)
@@ -266,6 +310,37 @@ namespace Accommodation.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+
+        public ActionResult Download(int? id)
+        {
+            //var r = db.PDFs.Find(id);
+
+            //return File(r.file, "application/pdf", r.location);
+
+            //var r = db.PDFs.Find(id);
+            //PDF pDF = db.PDFs.Find(id);
+            //string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"300px\">";
+            //embed += "If you are unable to view file, you can download from <a href = \"{0}\">here</a>";
+            //embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+            //embed += "</object>";
+            //TempData["Embed"] = string.Format(embed, VirtualPathUtility.ToAbsolute(r.location).ToString());
+
+            MemoryStream ms = null;
+
+            var item = db.owners.Where(x => x.ownerID == id).FirstOrDefault();
+            if (item != null)
+            {
+                ms = new MemoryStream(item.FileContent);
+            }
+            return new FileStreamResult(ms, item.FileName);
+
+
+            //return RedirectToAction("Download");
+        }
+
+
 
         //
         // GET: /Account/ConfirmEmail

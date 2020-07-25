@@ -1093,7 +1093,6 @@ C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\bin\Microsoft.Owin.Securi
 C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\obj\Debug\Accommodation.csprojAssemblyReference.cache
 C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\obj\Debug\Accommodation.csproj.CopyComplete
 C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\obj\Debug\Accommodation.dll
 C:\Users\Lungelo Nkosi\Documents\Roberta\Accommodation\obj\Debug\Accommodation.pdb

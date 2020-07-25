@@ -105,5 +105,28 @@ namespace Accommodation.Services.Implementation
                 return false;
             }
         }
+
+        public string GetBuildingAddress(int buildindId)
+        {
+            int bId = getBuildingId(buildindId);
+            var building = _buildingRepository.GetBuildings(bId);
+            return building.Address;
+        }
+
+        public int getBuildingId(int? roomId)
+        {
+            int buildingId = 0;
+            var building = _roomRepository.GetRooms();
+
+            foreach (var item in building)
+            {
+                if (item.RoomId == roomId)
+                {
+                    buildingId = item.BuildingId;
+                }
+            }
+            return buildingId;
+        }
+
     }
 }

@@ -16,5 +16,7 @@ namespace Accommodation.Services.Interface
         bool Delete(Appointment appointment);
         IEnumerable<Appointment> Find(Func<Appointment, bool> prdicate);
         bool CheckAppoinment(Appointment appointment);
+
+      string  getBuildingAddress(int ?managerId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Accommodation.Models;
 using Accommodation.Services.Interface;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,11 +40,13 @@ namespace Accommodation.Controllers
         {
             try
             {
+                var userName = User.Identity.GetUserName();
                 byte[] photo = null;
                 photo = new byte[photoUpload.ContentLength];
                 photoUpload.InputStream.Read(photo, 0, photoUpload.ContentLength);
                 building.BuildingPic = photo;
-
+                building.OwnerEmail = userName;
+                building.Address =($"{building.street_number}, {building.route}, {building.locality}, {building.administrative_area_level_1}, {building.country}");
                 if (_buildingService.Insert(building))
                 {
                     return RedirectToAction("Index");

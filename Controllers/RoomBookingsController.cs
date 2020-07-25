@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Accommodation.Models;
+using Accommodation.Services.Interface;
 using Microsoft.AspNet.Identity;
 
 namespace Accommodation.Controllers
@@ -14,6 +15,12 @@ namespace Accommodation.Controllers
     public class RoomBookingsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private IRoomService _roomService;
+
+        public RoomBookingsController(IRoomService roomService)
+        {
+            _roomService = roomService;
+        }
 
         // GET: RoomBookings
         public ActionResult Index()
@@ -47,9 +54,12 @@ namespace Accommodation.Controllers
             return View(roomBooking);
         }
 
+
+         [Authorize]
         // GET: RoomBookings/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
+            ViewBag.Id = id;
             ViewBag.BuildingId = new SelectList(db.buildings, "BuildingId", "BuildingName");
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "RoomNumber");
             return View();
@@ -63,11 +73,17 @@ namespace Accommodation.Controllers
         public ActionResult Create([Bind(Include = "BookingId,BuildingId,RoomId,TenantEmail,RoomPrice,Status")] RoomBooking roomBooking)
         {
             var userName = User.Identity.GetUserName();
+            var roomPrice = _roomService.GetRooms().ToList().Where(p => p.RoomId == roomBooking.RoomId).Select(p => p.RoomPrice).FirstOrDefault();
             if (ModelState.IsValid)
             {
+
                 roomBooking.TenantEmail = userName;
                 roomBooking.BuildingId = roomBooking.GetBuildingName();
                 roomBooking.DateOFBooking = DateTime.Now.Date;
+                roomBooking.RoomId = roomBooking.RoomId;
+                roomBooking.RoomPrice = roomPrice;
+                roomBooking.Status="Room Reserved";
+                roomBooking.BuildingAddress = _roomService.GetBuildingAddress(roomBooking.RoomId);
                 db.RoomBookings.Add(roomBooking);
                 db.SaveChanges();
                 return RedirectToAction("Index");

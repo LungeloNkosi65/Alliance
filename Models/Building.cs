@@ -12,6 +12,8 @@ namespace Accommodation.Models
     {
         [Key]
         public int BuildingId { get; set; }
+        [DisplayName("Owner Email")]
+        public string OwnerEmail { get; set; }
         [DisplayName("Building Name")]
         public string BuildingName { get; set; }
         [Required]
@@ -47,6 +49,7 @@ namespace Accommodation.Models
         [Display(Name = "Picture")]
 
         public byte[] BuildingPic { get; set; }
+        public string Address { get; set; }
         public ICollection <Room> Rooms { get; set; }
         public ICollection<RoomType> RoomTypes { get; set; }
       

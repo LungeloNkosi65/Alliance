@@ -259,6 +259,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Implementation\AppointmentService.cs" />
     <Compile Include="Services\Implementation\BuildingService.cs" />
+    <Compile Include="Services\Implementation\EmailService.cs" />
     <Compile Include="Services\Implementation\ManagerService.cs" />
     <Compile Include="Services\Implementation\RoomService.cs" />
     <Compile Include="Services\Implementation\RoomTypeService.cs" />
@@ -389,6 +390,8 @@
     <Content Include="Views\RoomBookings\Details.cshtml" />
     <Content Include="Views\RoomBookings\Edit.cshtml" />
     <Content Include="Views\RoomBookings\Index.cshtml" />
+    <Content Include="Views\Account\RegisterManager.cshtml" />
+    <Content Include="Views\Home\Galary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

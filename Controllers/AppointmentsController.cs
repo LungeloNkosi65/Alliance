@@ -58,7 +58,7 @@ namespace Accommodation.Controllers
             }
             return View(appointment);
         }
-
+        [Authorize]
         // GET: Appointments/Create
         public ActionResult Create()
         {

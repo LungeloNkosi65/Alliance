@@ -19,7 +19,10 @@ namespace Accommodation.Controllers
 
             return View();
         }
-
+        public ActionResult Galary()
+        {
+            return View();
+        }
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
