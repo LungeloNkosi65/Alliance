@@ -18,5 +18,8 @@ namespace Accommodation.Services.Interface
         bool CheckAppoinment(Appointment appointment);
 
       string  getBuildingAddress(int ?managerId);
+
+        int getReferenceManager(int? managerId);
+        List<int> getReferenceTimeSlot(int managerId);
     }
 }

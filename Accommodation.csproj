@@ -220,6 +220,7 @@
     <Compile Include="Controllers\timeslotsController.cs" />
     <Compile Include="DAL\Implementation\AppointmentRepository.cs" />
     <Compile Include="DAL\Implementation\BuildingRepository.cs" />
+    <Compile Include="DAL\Implementation\ManagerBuildingRepository.cs" />
     <Compile Include="DAL\Implementation\ManagerRepository.cs" />
     <Compile Include="DAL\Implementation\ManagerTimeSlotRepository.cs" />
     <Compile Include="DAL\Implementation\RoomRepository.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="DAL\Implementation\TimeSlotRepository.cs" />
     <Compile Include="DAL\Interface\IAppointmentRepository.cs" />
     <Compile Include="DAL\Interface\IBuildingRepository.cs" />
+    <Compile Include="DAL\Interface\IManagerBuildingRepository.cs" />
     <Compile Include="DAL\Interface\IManagerRepository.cs" />
     <Compile Include="DAL\Interface\IManagerTimeSlotRepository.cs" />
     <Compile Include="DAL\Interface\IRoomRepository.cs" />
@@ -260,11 +262,13 @@
     <Compile Include="Services\Implementation\AppointmentService.cs" />
     <Compile Include="Services\Implementation\BuildingService.cs" />
     <Compile Include="Services\Implementation\EmailService.cs" />
+    <Compile Include="Services\Implementation\ManagerBuildingService.cs" />
     <Compile Include="Services\Implementation\ManagerService.cs" />
     <Compile Include="Services\Implementation\RoomService.cs" />
     <Compile Include="Services\Implementation\RoomTypeService.cs" />
     <Compile Include="Services\Interface\IAppointmentService.cs" />
     <Compile Include="Services\Interface\IBuildingService.cs" />
+    <Compile Include="Services\Interface\IManagerBuildingService.cs" />
     <Compile Include="Services\Interface\IManagerService.cs" />
     <Compile Include="Services\Interface\ITimeSlotManagerService.cs" />
     <Compile Include="Services\Interface\ITimeSlotService.cs" />
@@ -392,6 +396,9 @@
     <Content Include="Views\RoomBookings\Index.cshtml" />
     <Content Include="Views\Account\RegisterManager.cshtml" />
     <Content Include="Views\Home\Galary.cshtml" />
+    <Content Include="Views\Home\Thankyou.cshtml" />
+    <Content Include="Views\Buildings\Index2.cshtml" />
+    <Content Include="Views\Buildings\Index1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

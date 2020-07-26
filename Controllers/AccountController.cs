@@ -168,8 +168,8 @@ namespace Accommodation.Controllers
 
             if (ModelState.IsValid)
             {
+                var OwnerEmail = User.Identity.GetUserName();
                 string pwd = "@User001";
-
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, pwd);
                      model.Password = pwd;
@@ -182,6 +182,7 @@ namespace Accommodation.Controllers
                     manager.Nationality = "South African";
                     manager.AltContactNumber = model.AltContactNumber;
                     manager.Phone = model.Phone;
+                    manager.OwnerEmail = OwnerEmail;
                     db.Managers.Add(manager);
                     db.SaveChanges();
 
@@ -274,7 +275,7 @@ namespace Accommodation.Controllers
                     owner.FileName = model.FileName;
                     db.owners.Add(owner);
                     db.SaveChanges();
-                    UserManager.AddToRole(user.Id, "Manager");
+                    //UserManager.AddToRole(user.Id, "Landlord");
 
                 }
                 else
@@ -302,7 +303,7 @@ namespace Accommodation.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     //UserManager.AddToRole(user.Id, "Manager");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Thankyou", "Home");
                 }
                 AddErrors(result);
             }

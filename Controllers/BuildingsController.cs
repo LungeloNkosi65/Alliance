@@ -14,12 +14,33 @@ namespace Accommodation.Controllers
         private IBuildingService _buildingService;
         public BuildingsController(IBuildingService buildingService)
         {
+
             _buildingService = buildingService;
         }
         // GET: Buildings
         public ActionResult Index()
         {
+            var userName = User.Identity.GetUserName();
+            if (User.IsInRole("Landlord"))
+            {
+                return View(_buildingService.GetBuildings().Where(x=>x.OwnerEmail==userName));
+
+            }
+            else
+            {
+                return View(_buildingService.GetBuildings());
+
+            }
+        }
+
+        public ActionResult Index2(string search)
+        {
+                return View(_buildingService.GetBuildings().Where(x => x.locality.Contains(search)).ToList());
+        }
+        public ActionResult Index1()
+        {
             return View(_buildingService.GetBuildings());
+
         }
 
         // GET: Buildings/Details/5

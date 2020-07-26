@@ -16,6 +16,12 @@ namespace Accommodation.Services.Implementation
         {
            _buildingRepository = buildingRepository;
         }
+
+        public bool CheckManager(int managerid)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Delete(Building building)
         {
             return _buildingRepository.Delete(building);
@@ -24,6 +30,14 @@ namespace Accommodation.Services.Implementation
         public IEnumerable<Building> Find(Func<Building, bool> prdicate)
         {
             return _buildingRepository.Find(prdicate);
+        }
+
+        public int getBuildingId(string ownerEmail)
+        {
+            var buildingId = (from b in _buildingRepository.GetBuildings()
+                              where b.OwnerEmail == ownerEmail
+                              select b.BuildingId).FirstOrDefault();
+            return buildingId;
         }
 
         public List<Building> GetBuildings()

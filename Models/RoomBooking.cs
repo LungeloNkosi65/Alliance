@@ -34,6 +34,14 @@ namespace Accommodation.Models
                                 select rb.Buildings.BuildingName).FirstOrDefault();
             return roomBuilding;
         }
+
+        public string GetBuildingAddress()
+        {
+            var buildingAddress = (from rb in db.Rooms
+                                   where rb.RoomId == RoomId
+                                   select rb.Buildings.Address).FirstOrDefault();
+            return buildingAddress;
+        }
     }
 }
 

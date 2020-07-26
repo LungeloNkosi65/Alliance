@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Accommodation.DAL.Interface;
 using Accommodation.Models;
 using Microsoft.AspNet.Identity;
 
@@ -14,14 +15,19 @@ namespace Accommodation.Controllers
     public class ManagerTimeSlotsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private IManagerTimeSlotRepository _managerTimeSlotRepository;
 
+        public ManagerTimeSlotsController(IManagerTimeSlotRepository managerTimeSlotRepository)
+        {
+            _managerTimeSlotRepository = managerTimeSlotRepository;
+        }
         // GET: ManagerTimeSlots
         public ActionResult Index()
         {
             var userName = User.Identity.GetUserName();
             if (User.IsInRole("Manager"))
             {
-                var managerTimeSlots = db.managerTimeSlots.Where(x => x.ManagerEmail == userName).Include(m => m.Timeslot);
+                var managerTimeSlots = _managerTimeSlotRepository.GetManagerTimeSlots().ToList().Where(x => x.ManagerEmail == userName);
                 return View(managerTimeSlots.ToList());
 
             }

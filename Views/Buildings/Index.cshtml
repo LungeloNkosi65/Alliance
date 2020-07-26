@@ -16,13 +16,13 @@
     <thead>
         <tr class="table-header-row">
             <th>
+                @Html.DisplayNameFor(model => model.OwnerEmail)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.BuildingName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                Address
             </th>
             @*<th>
             Co-ordinates
@@ -50,14 +50,15 @@
         {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.OwnerEmail)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.BuildingName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
-            <td>
-                @($"{item.street_number}, {item.route}, {item.locality}, {item.administrative_area_level_1}, {item.country}")
-            </td>
+        
             @*<td>
             @($"{item.Latitude}, {item.Longitude}")
         </td>*@

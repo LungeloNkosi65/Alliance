@@ -14,15 +14,15 @@ namespace Accommodation.Controllers
         private IRoomService _roomService;
         private IRoomTypeService _roomTypeService;
         private IBuildingService _buildingService;
-        private string userName;
+        //private string userName;
         
         public RoomsController()
         {
-            if (User.Identity.IsAuthenticated == true)
-            {
-                userName = User.Identity.GetUserName();
+            //if (User.Identity.IsAuthenticated == true)
+            //{
+            //    userName = User.Identity.GetUserName();
 
-            }
+            //}
         }
         public RoomsController (IRoomService roomService,IRoomTypeService roomTypeService ,IBuildingService buildingService)
         {
@@ -33,12 +33,23 @@ namespace Accommodation.Controllers
         // GET: Rooms
         public ActionResult Index()
         {
-            return View(_roomService.GetRooms());
+            var userName = User.Identity.GetUserName();
+            if (User.IsInRole("Landlord"))
+            {
+                int buildingId = _buildingService.getBuildingId(userName);
+                return View(_roomService.GetRooms().Where(x=>x.BuildingId==buildingId));
+
+            }
+            else
+            {
+                return View(_roomService.GetRooms());
+
+            }
         }
 
-        public ActionResult RoomsBooking()
+        public ActionResult RoomsBooking(int? id)
         {
-            return View(_roomService.GetRooms());
+            return View(_roomService.GetRooms().Where(p=>p.BuildingId ==id));
         }
         public ActionResult RoomsBooking2()
         {
@@ -54,9 +65,9 @@ namespace Accommodation.Controllers
         // GET: Rooms/Create
         public ActionResult Create()
         {
-            
+            var userName = User.Identity.GetUserName();
             ViewBag.roomtypeId = new SelectList(_roomTypeService.GetRoomTypes(), "roomtypeId", "Type");
-            ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x=>x.OwnerEmail==userName), "BuildingId", "BuildingName");
+            ViewBag.BuildingId = new SelectList(_buildingService.GetBuildings().Where(x=>x.OwnerEmail== userName), "BuildingId", "BuildingName");
             return View();
         }
 
@@ -64,6 +75,8 @@ namespace Accommodation.Controllers
         [HttpPost]
         public ActionResult Create (Room room, HttpPostedFileBase photoUpload)
         {
+            var userName = User.Identity.GetUserName();
+
             try
             {
                 
@@ -80,6 +93,7 @@ namespace Accommodation.Controllers
                     Random a = new Random();
 
                     room.RoomNumber = result.Substring(0, 3) + a.Next(0, result1);
+                    room.NoOfPeople = _roomService.getNumberOfTenants(room.roomtypeId);
                     if (_roomService.Insert(room))
                     {
 

@@ -25,11 +25,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Aliance Properties SA", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Alliance Properties SA", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Gallery", "Galary", "Home")</li>
+                    @*<li>@Html.ActionLink("Gallery", "Galary", "Home")</li>*@
 
                     @if (User.IsInRole("Admin"))
                     {
@@ -39,14 +39,15 @@
                     }
                     else if (User.IsInRole("Landlord"))
                     {
-                        <li>@Html.ActionLink("My Details", "Index2", "ApprovedOwners")</li>
+                        <li>@Html.ActionLink("My Details", "Index1", "ApprovedOwners")</li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Manage Buiding<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Add Building", "Index", "Buildings")</li>
+                                <li>@Html.ActionLink("Add Rooms", "Index", "Rooms")</li>
                                 <li>@Html.ActionLink("Add Manager", "RegisterManager", "Account")</li>
-                                <li>@Html.ActionLink("Asssing Manager", "Index", "ManagerBuildings")</li>
-                                <li>@Html.ActionLink("Building", "Index", "Buildings")</li>
-                                <li>@Html.ActionLink("Rooms", "Index", "Rooms")</li>
+                                <li>@Html.ActionLink("Assign Manager", "Create", "ManagerBuildings")</li>
+
                             </ul>
                         </li>
 

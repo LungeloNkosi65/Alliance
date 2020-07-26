@@ -11,10 +11,17 @@ namespace Accommodation.Services.Implementation
     public class AppointmentService : IAppointmentService
     {
         private IAppointmentRepository _appointmentRepository;
+        private IManagerBuildingRepository _managerBuildingRepository;
+        private IManagerTimeSlotRepository _managerTimeSlotRepository;
+        private IManagerRepository _managerRepository;
 
-        public AppointmentService(IAppointmentRepository appointmentRepository)
+        public AppointmentService(IAppointmentRepository appointmentRepository, IManagerBuildingRepository managerBuildingRepository, 
+            IManagerTimeSlotRepository managerTimeSlotRepository,IManagerRepository managerRepository)
         {
             _appointmentRepository = appointmentRepository;
+            _managerBuildingRepository = managerBuildingRepository;
+            _managerTimeSlotRepository = managerTimeSlotRepository;
+            _managerRepository = managerRepository;
         }
 
         public bool CheckAppoinment(Appointment appointment)
@@ -58,6 +65,27 @@ namespace Accommodation.Services.Implementation
         public string getBuildingAddress(int? managerId)
         {
             throw new NotImplementedException();
+        }
+
+        public int getReferenceManager(int? managerId)
+        {
+            var referenceManager = (from bm in _managerBuildingRepository.GetAll()
+                                    where bm.BuildingId == managerId
+                                    select bm.ManagerId).FirstOrDefault();
+            return referenceManager;
+        }
+
+        public List<int> getReferenceTimeSlot(int managerId)
+        {
+            var managerEmail = (from m in _managerRepository.GetManagers()
+                                where m.ManagerId == managerId
+                                select m.Email).FirstOrDefault();
+
+            var referenceId = (from tm in _managerTimeSlotRepository.GetManagerTimeSlots()
+                               where tm.ManagerEmail == managerEmail
+                               select tm.TimeSlotId).ToList();
+
+            return referenceId;
         }
 
         public bool Insert(Appointment appointment)

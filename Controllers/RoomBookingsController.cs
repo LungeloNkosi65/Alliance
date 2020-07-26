@@ -16,10 +16,12 @@ namespace Accommodation.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private IRoomService _roomService;
+        private int _buildingId;
 
         public RoomBookingsController(IRoomService roomService)
         {
             _roomService = roomService;
+            _buildingId = 0;
         }
 
         // GET: RoomBookings
@@ -60,6 +62,7 @@ namespace Accommodation.Controllers
         public ActionResult Create(int id)
         {
             ViewBag.Id = id;
+            _buildingId = id;
             ViewBag.BuildingId = new SelectList(db.buildings, "BuildingId", "BuildingName");
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "RoomNumber");
             return View();
@@ -83,7 +86,7 @@ namespace Accommodation.Controllers
                 roomBooking.RoomId = roomBooking.RoomId;
                 roomBooking.RoomPrice = roomPrice;
                 roomBooking.Status="Room Reserved";
-                roomBooking.BuildingAddress = _roomService.GetBuildingAddress(roomBooking.RoomId);
+                roomBooking.BuildingAddress = roomBooking.GetBuildingAddress();
                 db.RoomBookings.Add(roomBooking);
                 db.SaveChanges();
                 return RedirectToAction("Index");

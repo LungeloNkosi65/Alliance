@@ -35,7 +35,7 @@ namespace Accommodation.Models
         public string Latitude { get; set; }
         [Required]
         public string Longitude { get; set; }
-        [Display(Name = "Floor Number")]
+        [Display(Name = "Number Of Floors")]
 
         public int NoOfFloors { get; set; }
         [Display(Name = "Accommodation Type")]

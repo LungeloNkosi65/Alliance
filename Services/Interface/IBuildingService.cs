@@ -15,6 +15,10 @@ namespace Accommodation.Services.Interface
         bool Update(Building building);
         bool Delete(Building building);
         IEnumerable<Building> Find(Func<Building, bool> prdicate);
+        bool CheckManager(int managerid);
+
+        int getBuildingId(string ownerEmail);
+
         //double CslTot();
     }
 }

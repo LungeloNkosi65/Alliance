@@ -16,10 +16,20 @@ namespace Accommodation.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private readonly IAppointmentService _appointmentService;
+        private IRoomService _roomService;
+        public int? _buildingId;
 
-        public AppointmentsController(IAppointmentService appointmentService)
+        public AppointmentsController()
+        {
+            _buildingId = 0;
+
+        }
+
+
+        public AppointmentsController(IAppointmentService appointmentService, IRoomService roomService)
         {
             _appointmentService = appointmentService;
+            _roomService = roomService;
         }
 
         // GET: Appointments
@@ -59,11 +69,26 @@ namespace Accommodation.Controllers
             return View(appointment);
         }
         [Authorize]
-        // GET: Appointments/Create
-        public ActionResult Create()
+        // GET: Appointments/Create/id
+        public ActionResult Create(int? id)
         {
-            ViewBag.ManagerId = new SelectList(db.Managers, "ManagerId", "FullName");
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+            ViewBag.id = id;
+            _buildingId = id;
+            int referenceId = _appointmentService.getReferenceManager(id);
+            List<int> referenceTime = _appointmentService.getReferenceTimeSlot(referenceId);
+            ViewBag.ManagerId = new SelectList(db.Managers.Where(x=>x.ManagerId==referenceId), "ManagerId", "FullName");
             ViewBag.TimeSlotID = new SelectList(db.timeslots, "TimeSlotID", "TimeS");
+
+            //foreach(var item in referenceTime)
+            //{
+            //    ViewBag.TimeSlotID = new SelectList(db.timeslots.Where(x => x.TimeSlotID == item), "TimeSlotID", "TimeS");
+
+            //}
             return View();
         }
 
@@ -77,11 +102,17 @@ namespace Accommodation.Controllers
             var userName = User.Identity.GetUserName();
             if (ModelState.IsValid)
             {
+                if ( _buildingId == 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
                 if (_appointmentService.CheckAppoinment(appointment)==false)
                 {
                     appointment.email = userName;
                     appointment.DateBooked = DateTime.Now.Date;
                     appointment.Status = "Pending";
+                    appointment.BuildingAddress = appointment.getBuildingAddress();
+                    
                     db.Appointments.Add(appointment);
                     db.SaveChanges();
                     return RedirectToAction("Index");

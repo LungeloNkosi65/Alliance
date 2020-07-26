@@ -7,12 +7,20 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Accommodation.Models;
+using Accommodation.Services.Interface;
+using Microsoft.AspNet.Identity;
 
 namespace Accommodation.Controllers
 {
     public class ManagerBuildingsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private IManagerBuildingService _managerBuildingService;
+
+        public ManagerBuildingsController(IManagerBuildingService managerBuildingService)
+        {
+            _managerBuildingService = managerBuildingService;
+        }
 
         // GET: ManagerBuildings
         public ActionResult Index()
@@ -39,8 +47,9 @@ namespace Accommodation.Controllers
         // GET: ManagerBuildings/Create
         public ActionResult Create()
         {
-            ViewBag.BuildingId = new SelectList(db.buildings, "BuildingId", "BuildingName");
-            ViewBag.ManagerId = new SelectList(db.Managers, "ManagerId", "FullName");
+            var userName = User.Identity.GetUserName();
+            ViewBag.BuildingId = new SelectList(db.buildings.Where(x=>x.OwnerEmail==userName), "BuildingId", "BuildingName");
+            ViewBag.ManagerId = new SelectList(db.Managers.Where(x=>x.OwnerEmail==userName), "ManagerId", "FullName");
             return View();
         }
 
@@ -51,21 +60,34 @@ namespace Accommodation.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ManagerBuildingId,ManagerId,BuildingId")] ManagerBuilding managerBuilding)
         {
+            var userName = User.Identity.GetUserName();
             if (ModelState.IsValid)
             {
-                db.ManagerBuildings.Add(managerBuilding);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (_managerBuildingService.ChceckIfExists(managerBuilding))
+                {
+                    ModelState.AddModelError("", "You can not add the same manager for the same building two times");
+                    ViewBag.BuildingId = new SelectList(db.buildings.Where(x => x.OwnerEmail == userName), "BuildingId", "BuildingName", managerBuilding.BuildingId);
+                    ViewBag.ManagerId = new SelectList(db.Managers.Where(x => x.OwnerEmail == userName), "ManagerId", "FullName", managerBuilding.ManagerId);
+                    return View(managerBuilding);
+                }
+                else
+                {
+                    db.ManagerBuildings.Add(managerBuilding);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
 
-            ViewBag.BuildingId = new SelectList(db.buildings, "BuildingId", "BuildingName", managerBuilding.BuildingId);
-            ViewBag.ManagerId = new SelectList(db.Managers, "ManagerId", "FullName", managerBuilding.ManagerId);
+            ViewBag.BuildingId = new SelectList(db.buildings.Where(x=>x.OwnerEmail==userName), "BuildingId", "BuildingName", managerBuilding.BuildingId);
+            ViewBag.ManagerId = new SelectList(db.Managers.Where(x=>x.OwnerEmail==userName), "ManagerId", "FullName", managerBuilding.ManagerId);
             return View(managerBuilding);
         }
 
         // GET: ManagerBuildings/Edit/5
         public ActionResult Edit(int? id)
         {
+            var userName = User.Identity.GetUserName();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -75,8 +97,8 @@ namespace Accommodation.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.BuildingId = new SelectList(db.buildings, "BuildingId", "BuildingName", managerBuilding.BuildingId);
-            ViewBag.ManagerId = new SelectList(db.Managers, "ManagerId", "FullName", managerBuilding.ManagerId);
+            ViewBag.BuildingId = new SelectList(db.buildings.Where(x=>x.OwnerEmail==userName), "BuildingId", "BuildingName", managerBuilding.BuildingId);
+            ViewBag.ManagerId = new SelectList(db.Managers.Where(x=>x.OwnerEmail==userName), "ManagerId", "FullName", managerBuilding.ManagerId);
             return View(managerBuilding);
         }
 

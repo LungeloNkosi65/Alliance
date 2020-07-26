@@ -6,10 +6,12 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Accommodation.Models;
+using Accommodation.Services.Implementation;
 using Microsoft.AspNet.Identity;
 using PayFast;
 using PayFast.AspNet;
@@ -21,8 +23,8 @@ namespace Accommodation.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
 
-     
-    
+
+
         public OwnersController(ApplicationUserManager userManager)
         {
             _userManager = userManager;
@@ -32,7 +34,7 @@ namespace Accommodation.Controllers
         public ActionResult Index()
         {
             var userName = User.Identity.GetUserName();
-            var owners = db.owners.Where(x=>x.Email==userName);
+            var owners = db.owners.Where(x => x.Email == userName);
             return View(owners.ToList());
         }
         public ActionResult AdminIndex()
@@ -94,32 +96,64 @@ namespace Accommodation.Controllers
                 db.ApprovedOwners.Add(approvedOwnerss);
                 db.SaveChanges();
                 //var userId = User.;
-                var nno = db.owners.ToList().Where(p => p.Email == approvedOwnerss.Email).Select(p => p.FullName).FirstOrDefault();
-                Email email = new Email();
-                email.SendConfirmation(approvedOwnerss.Email, nno);
+                //var nno = db.owners.ToList().Where(p => p.Email == approvedOwnerss.Email).Select(p => p.FullName).FirstOrDefault();
+                //var user = db.owners.Find(owner.UserId);
+
+                var mailTo = new List<MailAddress>();
+                mailTo.Add(new MailAddress(owner.Email, owner.FullName));
+                var body = $"Hello {owner.FullName}, Congratulations. We are glad to inform you that your application has been approved. You can now procced to adding your building details. You are required to pay the Subscription Fee in order for your building to be active to the Tenants <br/> Regards,<br/><br/> HomeLink <br/> .";
+
+                Accommodation.Services.Implementation.EmailService emailService = new Accommodation.Services.Implementation.EmailService();
+                emailService.SendEmail(new EmailContent()
+                {
+                    mailTo = mailTo,
+                    mailCc = new List<MailAddress>(),
+                    mailSubject = "Reservation Receipt | Ref No.:" + owner.ownerID,
+                    mailBody = body,
+                    mailFooter = "<br/> Many Thanks, <br/> <b>YMCA Taxi Association</b>",
+                    mailPriority = MailPriority.High,
+                    mailAttachments = new List<Attachment>()
+
+                });
                 db.owners.Remove(owner);
                 db.SaveChanges();
                 //UserManager.AddToRole(user.Id, "Landlord");
                 _userManager.AddToRole(owner.UserId, "Landlord");
                 return RedirectToAction("AdminIndex");
             }
-       
+
         }
         public ActionResult Reject(int? id)
         {
             Owner owner = db.owners.Where(p => p.ownerID == id).FirstOrDefault();
-            if (owner.Status == "Rejected" || owner.Status =="Approved")
+            if (owner.Status == "Rejected" || owner.Status == "Approved")
             {
                 TempData["AlertMessage"] = "Th application has already been Rejected";
                 return RedirectToAction("AdminIndex");
             }
             else
-            {              
+            {
                 owner.Status = "Rejected";
                 db.Entry(owner).State = EntityState.Modified;
                 db.SaveChanges();
+                var mailTo = new List<MailAddress>();
+                mailTo.Add(new MailAddress(owner.Email, owner.FullName));
+                var body = $"Good Day {owner.FullName}, we apologize to inform you that your application has been rejected because your documentation(Title Deed) is incorrect.";
+
+                Accommodation.Services.Implementation.EmailService emailService = new Accommodation.Services.Implementation.EmailService();
+                emailService.SendEmail(new EmailContent()
+                {
+                    mailTo = mailTo,
+                    mailCc = new List<MailAddress>(),
+                    mailSubject = "Reservation Receipt | Ref No.:" + owner.ownerID,
+                    mailBody = body,
+                    mailFooter = "<br/> Many Thanks, <br/> <b>YMCA Taxi Association</b>",
+                    mailPriority = MailPriority.High,
+                    mailAttachments = new List<Attachment>()
+
+                });
                 return RedirectToAction("AdminIndex");
-            }            
+            }
         }
 
         // GET: Owners/Details/5
@@ -280,7 +314,7 @@ namespace Accommodation.Controllers
 
 
 
-  
+
 
 
 

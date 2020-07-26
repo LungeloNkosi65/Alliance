@@ -19,9 +19,9 @@ namespace Accommodation.Controllers
         public ActionResult Index()
         {
             var UserName = User.Identity.GetUserName();
-            if (User.IsInRole("LandLord"))
+            if (!User.IsInRole("Manager"))
             {
-                return View(db.Managers.ToList());
+                return View(db.Managers.ToList().Where(x=>x.OwnerEmail==UserName));
 
             }
             else

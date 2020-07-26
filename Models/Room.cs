@@ -19,7 +19,9 @@ namespace Accommodation.Models
         public int NoOfPeople { get; set; }
         [DisplayName("Room Description")]
         public string roomDescription { get; set; }
+        
         public byte[] RoomPicture { get; set; }
+        [DisplayName("Room Price"),DataType(DataType.Currency)]
         public decimal RoomPrice { get; set; }
         public virtual Building Buildings { get; set; }
         public virtual RoomType RoomTypes { get; set; }

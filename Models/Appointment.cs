@@ -20,7 +20,19 @@ namespace Accommodation.Models
         public DateTime DateBooked { get; set; }
         public int TimeSlotID { get; set; }
         public string Status { get; set; }
+        [DisplayName("BUilding Address")]
+        public string BuildingAddress { get; set; }
         public virtual Manager Managers { get; set; }
         public virtual timeslot Timeslot { get; set; }
+
+        ApplicationDbContext db = new ApplicationDbContext();
+
+       public string getBuildingAddress()
+        {
+            var buildingAddress = (from b in db.ManagerBuildings
+                              where b.ManagerId == ManagerId
+                              select b.Building.Address).FirstOrDefault();
+            return buildingAddress;
+        }
     }
 }

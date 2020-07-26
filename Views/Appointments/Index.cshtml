@@ -28,6 +28,9 @@
             @Html.DisplayNameFor(model => model.ADate)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.BuildingAddress)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Status)
         </th>
         <th></th>
@@ -35,40 +38,43 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Managers.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Timeslot.TimeS)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ADate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @if (User.IsInRole("Tenant"))
-                {
-                    @Html.ActionLink("Edit |", "Edit", new { id = item.AppointmentId })
-                    @Html.ActionLink("Details |", "Details", new { id = item.AppointmentId })
-                    @Html.ActionLink("Delete ", "Delete", new { id = item.AppointmentId })
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Managers.FullName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Timeslot.TimeS)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.email)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ADate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.BuildingAddress)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        @if (User.IsInRole("Tenant"))
+        {
+            @Html.ActionLink("Edit |", "Edit", new { id = item.AppointmentId })
+            @Html.ActionLink("Details |", "Details", new { id = item.AppointmentId })
+            @Html.ActionLink("Delete ", "Delete", new { id = item.AppointmentId })
 
-                }
+        }
 
-                @if (!User.IsInRole("Tenant"))
-                {
-                    @Html.ActionLink("Edit |", "Edit", new { id = item.AppointmentId })
-                    @Html.ActionLink("Details |", "Details", new { id = item.AppointmentId })
-                    @Html.ActionLink("Confirm Appointmen ", "ConfirmAppointment", new { id = item.AppointmentId })
+        @if (!User.IsInRole("Tenant"))
+        {
+            @Html.ActionLink("Edit |", "Edit", new { id = item.AppointmentId })
+            @Html.ActionLink("Details |", "Details", new { id = item.AppointmentId })
+            @Html.ActionLink("Confirm Appointmen ", "ConfirmAppointment", new { id = item.AppointmentId })
 
-                }
-            </td>
-        </tr>
+        }
+    </td>
+</tr>
     }
 
 </table>

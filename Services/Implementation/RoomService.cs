@@ -106,21 +106,22 @@ namespace Accommodation.Services.Implementation
             }
         }
 
-        public string GetBuildingAddress(int buildindId)
+        public string GetBuildingAddress(int? buildindId)
         {
-            int bId = getBuildingId(buildindId);
-            var building = _buildingRepository.GetBuildings(bId);
-            return building.Address;
+            var building = (from b in _buildingRepository.GetBuildings()
+                            where b.BuildingId == buildindId
+                            select b.Address).FirstOrDefault();
+            return building;
         }
 
         public int getBuildingId(int? roomId)
         {
-            int buildingId = 0;
+            int buildingId=0;
             var building = _roomRepository.GetRooms();
 
             foreach (var item in building)
             {
-                if (item.RoomId == roomId)
+                if (item.BuildingId == roomId)
                 {
                     buildingId = item.BuildingId;
                 }
@@ -128,5 +129,12 @@ namespace Accommodation.Services.Implementation
             return buildingId;
         }
 
+        public int getNumberOfTenants(int roomTypeId)
+        {
+            var numberOfTenants = (from rt in _roomTypeService.GetRoomTypes()
+                                   where rt.roomtypeId == roomTypeId
+                                   select rt.NumOfRooms).FirstOrDefault();
+            return numberOfTenants;
+        }
     }
 }

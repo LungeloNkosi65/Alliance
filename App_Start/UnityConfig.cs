@@ -76,6 +76,11 @@ namespace Accommodation
             container.RegisterType<IManagerRepository, ManagerRepository>();
             container.RegisterType<IManagerService, ManagerService>();
 
+            container.RegisterType<IManagerBuildingRepository, ManagerBuildingRepository>();
+            container.RegisterType<IManagerBuildingService, ManagerBuildingService>();
+
+            container.RegisterType<IManagerTimeSlotRepository, ManagerTimeSlotRepository>();
+            //container.RegisterType<ITimeSlotManagerService, T>();
             //container.RegisterType<INoOfPeopleInRoomRepository, NoOfPeopleInRoomRepository>();
             //container.RegisterType<INoOfPeopleInRoomService, NoOfPeopleInRoomService>();
 

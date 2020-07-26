@@ -10,6 +10,8 @@ namespace Accommodation.Models
     public class Manager
     {
         public int ManagerId { get; set; }
+        [DisplayName("Owner Email")]
+        public string OwnerEmail { get; set; }
         [Required]
         [RegularExpression(pattern: @"^[a-zA-Z''-'\s]{1,40}$", ErrorMessage = "Numbers and special characters are not allowed.")]
         [StringLength(maximumLength: 228, ErrorMessage = "First Name must be atleast 3 characters long", MinimumLength = 3)]
