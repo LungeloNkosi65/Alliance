@@ -84,6 +84,53 @@
 
                 </td>
             </tr>
+
+            <div>
+                @*<h2 style="background-color: Yellow;color: Blue; text-align: center; font-style: oblique">Satyaprakash Bootstrap PopUp</h2>*@
+                <fieldset>
+                    <legend style="color:orangered"></legend>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                @*<button id="btnShowModal" type="button"
+                                            class="btn btn-sm btn-default pull-left col-lg-11 button button4">
+                                        Satya Modals
+                                    </button>*@
+
+                                <div class="modal fade" tabindex="-1" id="loginModal"
+                                     data-keyboard="false" data-backdrop="static">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                </button>
+                                                <h4 class="modal-title">Subscription Details</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>
+                                                    To keep us up and function:<p>
+                                                    <p> One Building - R200 </p>
+                                                    <p> Two - Five Buildings - R950 </p>
+                                                    <p> Six - Ten Buildings - R1800 </p>
+                                                    <p> Eleven and More - R12000</p>
+                                                </h5>
+                                            </div>
+                                            <div class="modal-footer">
+                                                @Html.ActionLink("Confirm and Accept Payment", "Approve", "ApprovedOwners", new { id = item.ownerID, @class = "btn btn-primary button button4" })
+                                                <button type="button" id="btnHideModal" class="btn btn-primary button button4">
+                                                    Hide
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
         }
 
     </tbody>
@@ -108,53 +155,6 @@
     $('#my_list')
         .removeClass('display')
         .addClass('table table-striped table-hover');</script>
-<div>
-    @*<h2 style="background-color: Yellow;color: Blue; text-align: center; font-style: oblique">Satyaprakash Bootstrap PopUp</h2>*@
-    <fieldset>
-        <legend style="color:orangered"></legend>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-
-                    @*<button id="btnShowModal" type="button"
-                                class="btn btn-sm btn-default pull-left col-lg-11 button button4">
-                            Satya Modals
-                        </button>*@
-
-                    <div class="modal fade" tabindex="-1" id="loginModal"
-                         data-keyboard="false" data-backdrop="static">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                    </button>
-                                    <h4 class="modal-title">Subscription Details</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <h5>
-                                        To keep us up and function:<p>
-                                        <p> One Building - R200 </p>
-                                        <p> Two - Five Buildings - R950 </p>
-                                        <p> Six - Ten Buildings - R1800 </p>
-                                        <p> Eleven and More - R12000</p>
-                                    </h5>
-                                </div>
-                                <div class="modal-footer">
-                                    @Html.ActionLink("Confirm and Accept Payment", "OnceOff", "Owners", new { @class = "btn btn-primary button button4" })
-                                    <button type="button" id="btnHideModal" class="btn btn-primary button button4">
-                                        Hide
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </fieldset>
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
 
 </script>

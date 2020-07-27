@@ -71,22 +71,23 @@ namespace Accommodation.Services.Implementation
         {
             var referenceManager = (from bm in _managerBuildingRepository.GetAll()
                                     where bm.BuildingId == managerId
-                                    select bm.ManagerId).FirstOrDefault();
+                                    select bm.ManagerId).FirstOrDefault();  // this should return the 
+                                    //corresponding manager id from the association tablle;
             return referenceManager;
         }
 
-        public List<int> getReferenceTimeSlot(int managerId)
-        {
-            var managerEmail = (from m in _managerRepository.GetManagers()
-                                where m.ManagerId == managerId
-                                select m.Email).FirstOrDefault();
+        //public List<int> getReferenceTimeSlot(int managerId)
+        //{
+        //    var managerEmail = (from m in _managerRepository.GetManagers()
+        //                        where m.ManagerId == managerId
+        //                        select m.Email).FirstOrDefault();
 
-            var referenceId = (from tm in _managerTimeSlotRepository.GetManagerTimeSlots()
-                               where tm.ManagerEmail == managerEmail
-                               select tm.TimeSlotId).ToList();
+        //    var referenceId = (from tm in _managerTimeSlotRepository.GetManagerTimeSlots()
+        //                       where tm.ManagerEmail == managerEmail
+        //                       select tm.TimeSlotId).ToList();
 
-            return referenceId;
-        }
+        //    return referenceId;
+        //}
 
         public bool Insert(Appointment appointment)
         {
@@ -96,6 +97,19 @@ namespace Accommodation.Services.Implementation
         public bool Update(Appointment appointment)
         {
             return _appointmentRepository.Update(appointment);
+        }
+
+        int IAppointmentService.getReferenceTimeSlot(int managerId)
+        {
+            var managerEmail = (from m in _managerRepository.GetManagers()
+                                where m.ManagerId == managerId
+                                select m.Email).FirstOrDefault();
+
+            var referenceId = (from tm in _managerTimeSlotRepository.GetManagerTimeSlots()
+                               where tm.ManagerEmail == managerEmail
+                               select tm.TimeSlotId).FirstOrDefault();
+
+            return Convert.ToInt32(referenceId);
         }
     }
 }

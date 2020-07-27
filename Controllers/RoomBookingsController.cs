@@ -56,8 +56,21 @@ namespace Accommodation.Controllers
             return View(roomBooking);
         }
 
+        public ActionResult Confirm(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            RoomBooking roomBooking = db.RoomBookings.Find(id);
+            if (roomBooking == null)
+            {
+                return HttpNotFound();
+            }
+            return View(roomBooking);
+        }
 
-         [Authorize]
+        [Authorize]
         // GET: RoomBookings/Create
         public ActionResult Create(int id)
         {
@@ -89,7 +102,7 @@ namespace Accommodation.Controllers
                 roomBooking.BuildingAddress = roomBooking.GetBuildingAddress();
                 db.RoomBookings.Add(roomBooking);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Confirm", new { id =roomBooking.BookingId});
             }
 
             ViewBag.BuildingId = new SelectList(db.buildings, "BuildingId", "BuildingName", roomBooking.BuildingId);

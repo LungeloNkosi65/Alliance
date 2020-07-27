@@ -16,9 +16,6 @@
     <thead>
         <tr class="table-header-row">
             <th>
-                @Html.DisplayNameFor(model => model.OwnerEmail)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.BuildingName)
             </th>
             <th>
@@ -48,10 +45,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerEmail)
-            </td>
+        <tr>            
             <td>
                 @Html.DisplayFor(modelItem => item.BuildingName)
             </td>

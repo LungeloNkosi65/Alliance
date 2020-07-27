@@ -2,9 +2,14 @@
 
 @{
     ViewBag.Title = "Create";
+    var message = TempData["AlertMessage"] ?? string.Empty;
 }
-
-<h3>Add Property</h3>   
+<script>
+    var msg = '@message';
+    if (msg)
+        alert(msg);
+</script>
+<h3>Add Property</h3>
 
 
 @using (Html.BeginForm("Create", "Buildings", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -43,12 +48,12 @@
                     </td>
                 </tr>
                 @*<tr>
-                    <th>@Html.LabelFor(model => model.Status)</th>
-                    <td>
-                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-                    </td>
-                </tr>*@
+                        <th>@Html.LabelFor(model => model.Status)</th>
+                        <td>
+                            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>*@
                 <tr>
                     <th>@Html.LabelFor(model => model.BuildingDescription)</th>
                     <td>
@@ -123,8 +128,8 @@
                     Back to List
                 </a>
             </div>
-        </div> 
-     
+        </div>
+
     </div>
 }
 

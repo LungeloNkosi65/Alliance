@@ -108,9 +108,9 @@ namespace Accommodation.Controllers
                 {
                     mailTo = mailTo,
                     mailCc = new List<MailAddress>(),
-                    mailSubject = "Reservation Receipt | Ref No.:" + owner.ownerID,
+                    mailSubject = "Application Statement | Ref No.:" + owner.ownerID,
                     mailBody = body,
-                    mailFooter = "<br/> Many Thanks, <br/> <b>YMCA Taxi Association</b>",
+                    mailFooter = "<br/> Many Thanks, <br/> <b>Alliance</b>",
                     mailPriority = MailPriority.High,
                     mailAttachments = new List<Attachment>()
 
@@ -119,6 +119,8 @@ namespace Accommodation.Controllers
                 db.SaveChanges();
                 //UserManager.AddToRole(user.Id, "Landlord");
                 _userManager.AddToRole(owner.UserId, "Landlord");
+                TempData["AlertMessage"] = $"{owner.FullName} has been successfully approved";
+
                 return RedirectToAction("AdminIndex");
             }
 
@@ -145,13 +147,15 @@ namespace Accommodation.Controllers
                 {
                     mailTo = mailTo,
                     mailCc = new List<MailAddress>(),
-                    mailSubject = "Reservation Receipt | Ref No.:" + owner.ownerID,
+                    mailSubject = "Application Statement  | Ref No.:" + owner.ownerID,
                     mailBody = body,
-                    mailFooter = "<br/> Many Thanks, <br/> <b>YMCA Taxi Association</b>",
+                    mailFooter = "<br/> Many Thanks, <br/> <b>Alliance</b>",
                     mailPriority = MailPriority.High,
                     mailAttachments = new List<Attachment>()
 
                 });
+                TempData["AlertMessage"] = $"{owner.FullName} has been rejected";
+
                 return RedirectToAction("AdminIndex");
             }
         }

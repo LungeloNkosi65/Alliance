@@ -205,9 +205,9 @@ namespace Accommodation.Controllers
                 {
                     mailTo = mailTo,
                     mailCc = new List<MailAddress>(),
-                    mailSubject = "Confirm your account",
+                    mailSubject = "Confirm your account", 
                     mailBody = body,
-                    mailFooter = "<br/> Many Thanks, <br/> <b>Taxi App SA Team</b>",
+                    mailFooter = "<br/> Many Thanks, <br/> <b>Homelink</b>",
                     mailPriority = MailPriority.High,
                     mailAttachments = new List<Attachment>()
                 });

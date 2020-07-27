@@ -53,7 +53,19 @@ namespace Accommodation.Controllers
             }
         
         }
-
+        public ActionResult ReservationDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Appointment appointment = db.Appointments.Find(id);
+            if (appointment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(appointment);
+        }
         // GET: Appointments/Details/5
         public ActionResult Details(int? id)
         {
@@ -80,7 +92,7 @@ namespace Accommodation.Controllers
             ViewBag.id = id;
             _buildingId = id;
             int referenceId = _appointmentService.getReferenceManager(id);
-            List<int> referenceTime = _appointmentService.getReferenceTimeSlot(referenceId);
+            int referenceTime = _appointmentService.getReferenceTimeSlot(referenceId);
             ViewBag.ManagerId = new SelectList(db.Managers.Where(x=>x.ManagerId==referenceId), "ManagerId", "FullName");
             ViewBag.TimeSlotID = new SelectList(db.timeslots, "TimeSlotID", "TimeS");
 
@@ -115,7 +127,7 @@ namespace Accommodation.Controllers
                     
                     db.Appointments.Add(appointment);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("ReservationDetails", new { id = appointment.AppointmentId});
                 }
                 else
                 {

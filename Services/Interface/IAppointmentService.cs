@@ -20,6 +20,7 @@ namespace Accommodation.Services.Interface
       string  getBuildingAddress(int ?managerId);
 
         int getReferenceManager(int? managerId);
-        List<int> getReferenceTimeSlot(int managerId);
+        //List<int> getReferenceTimeSlot(int managerId);
+        int getReferenceTimeSlot(int managerId);
     }
 }

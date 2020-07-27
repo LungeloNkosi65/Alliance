@@ -18,7 +18,7 @@ namespace Accommodation.Services.Implementation
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = true;
             smtpClient.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings[EmailFrom], ConfigurationManager.AppSettings[PassKey]);
-            mailFrom = new MailAddress(ConfigurationManager.AppSettings[EmailFrom], "Taxi App SA");
+            mailFrom = new MailAddress(ConfigurationManager.AppSettings[EmailFrom], "Homelink");
         }
         public void SendEmail(EmailContent emailContent)
         {

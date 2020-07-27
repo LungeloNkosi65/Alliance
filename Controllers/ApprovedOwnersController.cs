@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Accommodation.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Accommodation.Controllers
 {
@@ -21,7 +22,8 @@ namespace Accommodation.Controllers
         }
         public ActionResult Index1()
         {
-            return View(db.ApprovedOwners.ToList());
+            var email = User.Identity.GetUserName();
+            return View(db.ApprovedOwners.ToList().Where(p=>p.Email ==email));
         }
 
         // GET: ApprovedOwners/Details/5
@@ -38,7 +40,16 @@ namespace Accommodation.Controllers
             }
             return View(approvedOwners);
         }
+        public ActionResult Approve(int? id)
+        {
+            ApprovedOwnerss approvedOwners = db.ApprovedOwners.Where(p => p.ownerID == id).FirstOrDefault();
+            approvedOwners.Status = "Paid";
+            db.Entry(approvedOwners).State = EntityState.Modified;
+            db.SaveChanges();
+            TempData["AlertMessage"] = $"Status successfully updated";
 
+            return RedirectToAction("Index1");
+        }
         // GET: ApprovedOwners/Create
         public ActionResult Create()
         {

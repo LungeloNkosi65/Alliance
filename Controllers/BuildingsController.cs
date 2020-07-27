@@ -12,9 +12,10 @@ namespace Accommodation.Controllers
     public class BuildingsController : Controller
     {
         private IBuildingService _buildingService;
-        public BuildingsController(IBuildingService buildingService)
+        private ApplicationDbContext _context;
+        public BuildingsController(IBuildingService buildingService, ApplicationDbContext context)
         {
-
+            _context = context;
             _buildingService = buildingService;
         }
         // GET: Buildings
@@ -36,6 +37,10 @@ namespace Accommodation.Controllers
         public ActionResult Index2(string search)
         {
                 return View(_buildingService.GetBuildings().Where(x => x.locality.Contains(search)).ToList());
+        }
+        public ActionResult Index3()
+        {
+            return View(_buildingService.GetBuildings());
         }
         public ActionResult Index1()
         {
@@ -59,19 +64,30 @@ namespace Accommodation.Controllers
         [HttpPost]
         public ActionResult Create(Building building, HttpPostedFileBase photoUpload)
         {
+            var email = User.Identity.GetUserName();
+
+            var status = _context.ApprovedOwners.Where(p => p.Email == email).Select(p => p.Status).FirstOrDefault();
             try
             {
-                var userName = User.Identity.GetUserName();
-                byte[] photo = null;
-                photo = new byte[photoUpload.ContentLength];
-                photoUpload.InputStream.Read(photo, 0, photoUpload.ContentLength);
-                building.BuildingPic = photo;
-                building.OwnerEmail = userName;
-                building.Address =($"{building.street_number}, {building.route}, {building.locality}, {building.administrative_area_level_1}, {building.country}");
-                if (_buildingService.Insert(building))
+                if(status == "Paid")
                 {
-                    return RedirectToAction("Index");
+                    var userName = User.Identity.GetUserName();
+                    byte[] photo = null;
+                    photo = new byte[photoUpload.ContentLength];
+                    photoUpload.InputStream.Read(photo, 0, photoUpload.ContentLength);
+                    building.BuildingPic = photo;
+                    building.OwnerEmail = userName;
+                    building.Address = ($"{building.street_number}, {building.route}, {building.locality}, {building.administrative_area_level_1}, {building.country}");
+                    if (_buildingService.Insert(building))
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
+                else
+                {
+                    TempData["AlertMessage"] = "Please pay subscription first before adding a building";
+                }
+
 
             }
             catch
